@@ -17,8 +17,5 @@
         "TelegramNotifier\\Laravel\\TelegramNotifierServiceProvider"
       ]
     }
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^12.1"
   }
 }
