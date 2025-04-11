@@ -1,0 +1,21 @@
+{
+  "name": "tuonome/telegram-error-notifier",
+  "description": "Send error messages to a Telegram bot",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "TelegramNotifier\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.4",
+    "guzzlehttp/guzzle": "^7.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "TelegramNotifier\\Laravel\\TelegramNotifierServiceProvider"
+      ]
+    }
+  }
+}
