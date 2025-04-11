@@ -1,6 +1,6 @@
 {
-  "name": "tuonome/telegram-error-notifier",
-  "description": "Send error messages to a Telegram bot",
+  "name": "jpblu/telegram-error-notifier",
+  "description": "A PHP library to send messages to a Telegram bot in case of error. Compatible with Laravel.",
   "type": "library",
   "autoload": {
     "psr-4": {
@@ -17,5 +17,8 @@
         "TelegramNotifier\\Laravel\\TelegramNotifierServiceProvider"
       ]
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.1"
   }
 }
