@@ -2,6 +2,8 @@
 ![GitHub Release](https://img.shields.io/github/v/release/jpblu/telegram-error-notifier)
 ![Static Badge](https://img.shields.io/badge/PHP-%3E%3D%208.1-blue)
 ![Laravel Compatibility](https://img.shields.io/badge/Laravel-8.x%20|%209.x%20|%2010.x%20|%2011.x-blueviolet?logo=laravel&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 
 # Telegram Error Notifier
 
