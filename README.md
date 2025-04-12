@@ -1,6 +1,7 @@
 [![Tests](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml/badge.svg)](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml)
 ![GitHub Release](https://img.shields.io/github/v/release/jpblu/telegram-error-notifier)
-![Static Badge](https://img.shields.io/badge/PHP-%3E%208.1-blue)
+![Static Badge](https://img.shields.io/badge/PHP-%3E%3D%208.1-blue)
+![Laravel Compatibility](https://img.shields.io/badge/Laravel-8.x%20|%209.x%20|%2010.x%20|%2011.x-blueviolet?logo=laravel&logoColor=white)
 
 # Telegram Error Notifier
 
@@ -91,6 +92,18 @@ public function report(Throwable $exception)
 ```
 TelegramNotifier::notify('User import completed successfully.');
 ```
+
+### Laravel Compatibility
+
+This package has been tested and works with the following Laravel versions:
+
+- Laravel 8.x
+- Laravel 9.x (LTS)
+- Laravel 10.x (LTS)
+- Laravel 11.x
+- Laravel 12.x
+
+Laravel 5.5+ may also work, as this package uses automatic service provider registration via Composer.
 
 ### Acknowledgments
 - [GuzzleHTTP](https://github.com/guzzle/guzzle) for client connection
