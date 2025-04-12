@@ -1,7 +1,10 @@
-[![Run Tests](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml/badge.svg)](https://github.com/tuonome/telegram-error-notifier/actions/workflows/tests.yml)
+[![Tests](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml/badge.svg)](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml)
+![GitHub Release](https://img.shields.io/github/v/release/jpblu/telegram-error-notifier)
+![Static Badge](https://img.shields.io/badge/PHP-%3E%208.1-blue)
+
 # Telegram Error Notifier
 
-A PHP library to send messages to a Telegram bot in case of error. Compatible with Laravel.
+A PHP library for sending alert messages to a Telegram bot. Compatible with Laravel.
 
 ## Install
 
@@ -9,7 +12,7 @@ A PHP library to send messages to a Telegram bot in case of error. Compatible wi
 composer require jpblu/telegram-error-notifier
 ```
 
-## Use (PHP projects)
+## Usage (PHP projects)
 
 ```php
 use TelegramNotifier\TelegramNotifier;
@@ -18,24 +21,77 @@ $notifier = new TelegramNotifier('BOT_TOKEN', 'CHAT_ID');
 $notifier->send("Errore!");
 ```
 
-## Use (Laravel project)
+## Usage (Laravel project)
 
-1. add to `.env`:
+### Configuration
+
+1. Add environment variables to your `.env` file:
 ```
 TELEGRAM_BOT_TOKEN=your-bot-token
 TELEGRAM_CHAT_ID=your-chat-id
 ```
 
-2. Add in `Handler.php`:
+2. (Optional) Publish the config file:
+```
+php artisan vendor:publish --tag=telegram-notifier-config
+```
 
-```php
+### Examples
+
+#### Send an error message inside a `try/catch` block
+```
+use TelegramNotifier\TelegramNotifier;
+
+public function store(Request $request)
+{
+    try {
+        // Application logic
+    } catch (\Throwable $e) {
+        TelegramNotifier::notify($e->getMessage());
+        throw $e; // or handle the exception
+    }
+}
+```
+
+#### Notify errors inside a queued Job
+```
+use TelegramNotifier\TelegramNotifier;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class ProcessUserJob implements ShouldQueue
+{
+    public function handle()
+    {
+        try {
+            // Background processing logic
+        } catch (\Throwable $e) {
+            TelegramNotifier::notify("Job failed: " . $e->getMessage());
+            throw $e;
+        }
+    }
+}
+```
+
+#### Catch all unhandled exceptions in the global Exception Handler
+Edit your `app/Exceptions/Handler.php` file:
+```
+use TelegramNotifier\TelegramNotifier;
+
 public function report(Throwable $exception)
 {
     parent::report($exception);
 
-    if (app()->bound(\TelegramNotifier\TelegramNotifier::class)) {
-        app(\TelegramNotifier\TelegramNotifier::class)
-            ->send("*Error:* `" . get_class($exception) . "`\n*Message:* " . $exception->getMessage());
+    if ($this->shouldReport($exception)) {
+        TelegramNotifier::notify($exception->getMessage());
     }
 }
 ```
+
+#### Manual notification
+```
+TelegramNotifier::notify('User import completed successfully.');
+```
+
+### Acknowledgments
+- [GuzzleHTTP](https://github.com/guzzle/guzzle) for client connection
+- [PHPUnit](https://github.com/sebastianbergmann/phpunit/) for testing suite
