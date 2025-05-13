@@ -19,19 +19,27 @@ class TelegramNotifier
         ]);
     }
 
-    public function send(string $message): bool
+    public function send(string $message): array
     {
         try {
-            $this->client->post('sendMessage', [
+            $response = $this->client->post('sendMessage', [
                 'form_params' => [
                     'chat_id' => $this->chatId,
                     'text' => $message,
-                    'parse_mode' => 'Markdown'
+                    'parse_mode' => 'Markdown',
                 ]
             ]);
-            return true;
+
+            $body = json_decode((string) $response->getBody(), true);
+            return [
+                'success' => true,
+                'response' => $body
+            ];
         } catch (\Throwable $e) {
-            return false;
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
         }
     }
 }

@@ -9,10 +9,16 @@ use GuzzleHttp\Psr7\Response;
 
 class TelegramNotifierTest extends TestCase
 {
-    public function testSendReturnsTrueOnSuccess()
+    public function testSendReturnsSuccessOnValidResponse()
     {
         $mock = new MockHandler([
-            new Response(200, [], json_encode(['ok' => true]))
+            new Response(200, [], json_encode([
+                'ok' => true,
+                'result' => [
+                    'message_id' => 123,
+                    'text' => 'Test message'
+                ]
+            ]))
         ]);
 
         $handlerStack = HandlerStack::create($mock);
@@ -24,10 +30,15 @@ class TelegramNotifierTest extends TestCase
         $property->setAccessible(true);
         $property->setValue($notifier, $client);
 
-        $this->assertTrue($notifier->send('Test message'));
+        $result = $notifier->send('Test message');
+
+        $this->assertIsArray($result);
+        $this->assertTrue($result['success']);
+        $this->assertArrayHasKey('response', $result);
+        $this->assertEquals('Test message', $result['response']['result']['text']);
     }
 
-    public function testSendReturnsFalseOnFailure()
+    public function testSendReturnsErrorOnException()
     {
         $mock = new MockHandler([
             new Response(500)
@@ -42,6 +53,11 @@ class TelegramNotifierTest extends TestCase
         $property->setAccessible(true);
         $property->setValue($notifier, $client);
 
-        $this->assertFalse($notifier->send('Test message'));
+        $result = $notifier->send('Test message');
+
+        $this->assertIsArray($result);
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('error', $result);
+        $this->assertIsString($result['error']);
     }
 }
