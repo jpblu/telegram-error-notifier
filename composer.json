@@ -1,6 +1,6 @@
 {
   "name": "jpblu/telegram-error-notifier",
-  "description": "A PHP library to send messages to a Telegram bot in case of error. Compatible with Laravel.",
+  "description": "A PHP library for sending alert messages to a Telegram bot. Compatible with Laravel.",
   "type": "library",
   "license": "MIT",
   "autoload": {

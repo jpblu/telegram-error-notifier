@@ -21,7 +21,7 @@ composer require jpblu/telegram-error-notifier
 use TelegramNotifier\TelegramNotifier;
 
 $notifier = new TelegramNotifier('BOT_TOKEN', 'CHAT_ID');
-$notifier->send("Errore!");
+$notifier->send("Error!");
 ```
 
 ## Usage (Laravel project)
