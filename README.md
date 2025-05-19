@@ -25,7 +25,7 @@ composer require jpblu/telegram-error-notifier
 4. Add your bot as an **admin** of the channel.
 5. Get the channel ID (prefix with `@` if it's a public channel or use the numeric ID for private ones).
 
-> **Note**:  
+> **Note**:
 > Refer to [Telegram Bot documentations](https://core.telegram.org/bots/api) for further instructions.
 
 ## Usage (PHP projects)
@@ -110,7 +110,7 @@ public function report(Throwable $exception)
 
 #### Manual notification
 ```
-TelegramNotifier::notify('User import completed successfully.');
+TelegramNotifier::send('User import completed successfully.');
 ```
 
 ## Returned Values
