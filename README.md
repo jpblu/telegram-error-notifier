@@ -9,34 +9,52 @@
 
 A PHP library for sending alert messages to a Telegram bot. Compatible with Laravel.
 
-## Install
+## Installation
+
+You can install the package using Composer:
 
 ```bash
 composer require jpblu/telegram-error-notifier
 ```
+
+## Telegram Setup
+
+1. Create a [Telegram bot](https://t.me/BotFather).
+2. Get the bot token.
+3. Create a private or public channel.
+4. Add your bot as an **admin** of the channel.
+5. Get the channel ID (prefix with `@` if it's a public channel or use the numeric ID for private ones).
+
+> **Note**:  
+> Refer to [Telegram Bot documentations](https://core.telegram.org/bots/api) for further instructions.
 
 ## Usage (PHP projects)
 
 ```php
 use TelegramNotifier\TelegramNotifier;
 
-$notifier = new TelegramNotifier('BOT_TOKEN', 'CHAT_ID');
-$notifier->send("Error!");
+$notifier = new TelegramNotifier('TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID');
+$response = $notifier->send('An error occurred in your service.');
 ```
 
 ## Usage (Laravel project)
 
+This library automatically registers a Service Provider and Facade if used in a Laravel project.
+
 ### Configuration
 
 1. Add environment variables to your `.env` file:
-```
+```env
 TELEGRAM_BOT_TOKEN=your-bot-token
 TELEGRAM_CHAT_ID=your-chat-id
 ```
 
-2. (Optional) Publish the config file:
-```
-php artisan vendor:publish --tag=telegram-notifier-config
+2. Add to  `config/services.php`
+```php
+'telegram_notifier' => [
+    'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+    'chat_id' => env('TELEGRAM_CHAT_ID'),
+],
 ```
 
 ### Examples
@@ -50,7 +68,7 @@ public function store(Request $request)
     try {
         // Application logic
     } catch (\Throwable $e) {
-        TelegramNotifier::notify($e->getMessage());
+        TelegramNotifier::send($e->getMessage());
         throw $e; // or handle the exception
     }
 }
@@ -68,7 +86,7 @@ class ProcessUserJob implements ShouldQueue
         try {
             // Background processing logic
         } catch (\Throwable $e) {
-            TelegramNotifier::notify("Job failed: " . $e->getMessage());
+            TelegramNotifier::send("Job failed: " . $e->getMessage());
             throw $e;
         }
     }
@@ -85,7 +103,7 @@ public function report(Throwable $exception)
     parent::report($exception);
 
     if ($this->shouldReport($exception)) {
-        TelegramNotifier::notify($exception->getMessage());
+        TelegramNotifier::send($exception->getMessage());
     }
 }
 ```
@@ -93,6 +111,23 @@ public function report(Throwable $exception)
 #### Manual notification
 ```
 TelegramNotifier::notify('User import completed successfully.');
+```
+
+## Returned Values
+
+The `send()` method returns an **array** with the response from the Telegram API (or an error if applicable).
+
+Example:
+
+```php
+[
+    'ok' => true,
+    'result' => [
+        'message_id' => 123,
+        'chat' => [...],
+        'text' => 'Your message'
+    ]
+]
 ```
 
 ### Laravel Compatibility
@@ -103,7 +138,6 @@ This package has been tested and works with the following Laravel versions:
 - Laravel 9.x (LTS)
 - Laravel 10.x (LTS)
 - Laravel 11.x
-- Laravel 12.x
 
 Laravel 5.5+ may also work, as this package uses automatic service provider registration via Composer.
 

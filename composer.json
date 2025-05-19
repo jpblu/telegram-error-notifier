@@ -16,7 +16,13 @@
     "laravel": {
       "providers": [
         "TelegramNotifier\\Laravel\\TelegramNotifierServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "TelegramNotifier": "TelegramNotifier\\Laravel\\TelegramNotifierFacade"
+      }
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.0"
   }
 }
