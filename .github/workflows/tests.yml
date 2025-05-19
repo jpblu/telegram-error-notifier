@@ -12,9 +12,18 @@ jobs:
 
     strategy:
       matrix:
-        php: [8.1, 8.2, 8.3, 8.4]
+        include:
+          - php: 8.1
+            phpunit: ^10.0
+          - php: 8.2
+            phpunit: ^11.0
+          - php: 8.3
+            phpunit: ^12.0
+          - php: 8.4
+            phpunit: ^12.0
 
     name: PHP ${{ matrix.php }} Test
+
     steps:
       - uses: actions/checkout@v3
 
@@ -27,7 +36,9 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer install --no-progress --prefer-dist
+        run: |
+          composer require --dev phpunit/phpunit "${{ matrix.phpunit }}" --with-all-dependencies
+          composer install --no-progress --prefer-dist
 
       - name: Run PHPUnit tests
-        run: phpunit
+        run: vendor/bin/phpunit
