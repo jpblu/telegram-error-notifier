@@ -1,7 +1,7 @@
 [![Tests](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml/badge.svg)](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml)
 ![GitHub Release](https://img.shields.io/github/v/release/jpblu/telegram-error-notifier)
 ![Static Badge](https://img.shields.io/badge/PHP-%3E%3D%208.1-blue)
-![Laravel Compatibility](https://img.shields.io/badge/Laravel-8.x%20|%209.x%20|%2010.x%20|%2011.x-blueviolet?logo=laravel&logoColor=white)
+![Laravel Compatibility](https://img.shields.io/badge/Laravel-8.x%20|%209.x%20|%2010.x%20|%2011.x%20|%2012.x-blueviolet?logo=laravel&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 
@@ -68,7 +68,7 @@ public function store(Request $request)
     try {
         // Application logic
     } catch (\Throwable $e) {
-        TelegramNotifier::send($e->getMessage());
+        app(\TelegramNotifier::class)->send($e->getMessage());
         throw $e; // or handle the exception
     }
 }
@@ -86,7 +86,7 @@ class ProcessUserJob implements ShouldQueue
         try {
             // Background processing logic
         } catch (\Throwable $e) {
-            TelegramNotifier::send("Job failed: " . $e->getMessage());
+            app(\TelegramNotifier::class)->send("Job failed: " . $e->getMessage());
             throw $e;
         }
     }
@@ -103,7 +103,7 @@ public function report(Throwable $exception)
     parent::report($exception);
 
     if ($this->shouldReport($exception)) {
-        TelegramNotifier::send($exception->getMessage());
+        app(\TelegramNotifier::class)->send($exception->getMessage());
     }
 }
 ```

@@ -9,10 +9,11 @@ class TelegramNotifierServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('telegram-notifier', function ($app) {
+        $this->app->singleton(TelegramNotifier::class, function ($app) {
+            $config = config('services.telegram_notifier');
             return new TelegramNotifier(
-                config('services.telegram_notifier.bot_token'),
-                config('services.telegram_notifier.chat_id')
+                $config['bot_token'],
+                $config['chat_id']
             );
         });
     }
