@@ -138,6 +138,7 @@ This package has been tested and works with the following Laravel versions:
 - Laravel 9.x (LTS)
 - Laravel 10.x (LTS)
 - Laravel 11.x
+- Laravel 12.x
 
 Laravel 5.5+ may also work, as this package uses automatic service provider registration via Composer.
 
