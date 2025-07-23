@@ -16,6 +16,8 @@ class TelegramNotifierServiceProvider extends ServiceProvider
                 $config['chat_id']
             );
         });
+
+        $this->app->alias(TelegramNotifier::class, 'telegram-notifier');
     }
 
     public function boot() {
