@@ -2,42 +2,42 @@
 
 namespace TelegramNotifier\Laravel\Commands;
 
-use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use TelegramNotifier\TelegramNotifier;
 
 class TelegramSendCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'telegram:send {message : The message to send}';
+    protected static $defaultName = 'telegram:send';
+    protected static $defaultDescription = 'Send a message to Telegram';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Send a message to Telegram';
+    private TelegramNotifier $telegramNotifier;
 
-    /**
-     * Execute the console command.
-     *
-     * @param TelegramNotifier $telegramNotifier
-     * @return int
-     */
-    public function handle(TelegramNotifier $telegramNotifier): int
+    public function __construct(TelegramNotifier $telegramNotifier)
     {
-        $message = $this->argument('message');
+        parent::__construct();
+        $this->telegramNotifier = $telegramNotifier;
+    }
 
-        $result = $telegramNotifier->send($message);
+    protected function configure(): void
+    {
+        $this
+            ->addArgument('message', InputArgument::REQUIRED, 'The message to send');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $message = $input->getArgument('message');
+
+        $result = $this->telegramNotifier->send($message);
 
         if ($result['success']) {
-            $this->info('Message sent successfully to Telegram!');
+            $output->writeln('<info>Message sent successfully to Telegram!</info>');
             return self::SUCCESS;
         } else {
-            $this->error('Failed to send message: ' . $result['error']);
+            $output->writeln('<error>Failed to send message: ' . $result['error'] . '</error>');
             return self::FAILURE;
         }
     }

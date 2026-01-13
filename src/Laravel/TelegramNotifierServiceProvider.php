@@ -29,4 +29,9 @@ class TelegramNotifierServiceProvider extends ServiceProvider
             ]);
         }
     }
+
+    public function provides()
+    {
+        return [TelegramSendCommand::class];
+    }
 }
