@@ -24,9 +24,9 @@ class TelegramNotifierServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $command = new TelegramSendCommand($this->app->make(TelegramNotifier::class));
-            $command->setName('telegram:send');
-            $this->commands([$command]);
+            $this->commands([
+                \TelegramNotifier\Laravel\Commands\TelegramSendCommand::class,
+            ]);
         }
     }
 
