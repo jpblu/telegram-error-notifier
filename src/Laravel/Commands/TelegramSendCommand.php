@@ -31,10 +31,11 @@ class TelegramSendCommand extends BaseCommand
 
     protected function configure(): void
     {
-        $this
-            ->setName('telegram:send')
-            ->setDescription($this->description)
-            ->addArgument('message', InputArgument::REQUIRED, 'The message to send');
+        $this->setDescription($this->description);
+
+        if (!method_exists($this, 'argument')) {
+            $this->addArgument('message', InputArgument::REQUIRED, 'The message to send');
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
