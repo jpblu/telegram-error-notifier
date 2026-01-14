@@ -113,6 +113,18 @@ public function report(Throwable $exception)
 TelegramNotifier::send('User import completed successfully.');
 ```
 
+#### Send a message from console
+You can send messages directly from the console using the Artisan command:
+
+```bash
+php artisan telegram:send "Your message here"
+```
+
+Example with dynamic messages:
+```bash
+php artisan telegram:send "Database backup completed at $(date)"
+```
+
 ## Returned Values
 
 The `send()` method returns an **array** with the response from the Telegram API (or an error if applicable).

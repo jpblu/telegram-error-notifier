@@ -10,7 +10,8 @@
   },
   "require": {
     "php": ">=7.4",
-    "guzzlehttp/guzzle": "^7.0"
+    "guzzlehttp/guzzle": "^7.0",
+    "symfony/console": "^5.4|^6.0|^7.0"
   },
   "extra": {
     "laravel": {
@@ -24,5 +25,9 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^12.0"
+  },
+  "suggest": {
+    "laravel/framework": "For easy integration with Laravel applications",
+    "symfony/console": "For standalone console command usage"
   }
 }

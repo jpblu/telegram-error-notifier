@@ -4,6 +4,7 @@ namespace TelegramNotifier\Laravel;
 
 use Illuminate\Support\ServiceProvider;
 use TelegramNotifier\TelegramNotifier;
+use TelegramNotifier\Laravel\Commands\TelegramSendCommand;
 
 class TelegramNotifierServiceProvider extends ServiceProvider
 {
@@ -20,7 +21,17 @@ class TelegramNotifierServiceProvider extends ServiceProvider
         $this->app->alias(TelegramNotifier::class, 'telegram-notifier');
     }
 
-    public function boot() {
+    public function boot()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \TelegramNotifier\Laravel\Commands\TelegramSendCommand::class,
+            ]);
+        }
+    }
 
+    public function provides()
+    {
+        return [TelegramSendCommand::class];
     }
 }
