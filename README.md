@@ -1,7 +1,7 @@
 [![Tests](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml/badge.svg)](https://github.com/jpblu/telegram-error-notifier/actions/workflows/tests.yml)
 ![GitHub Release](https://img.shields.io/github/v/release/jpblu/telegram-error-notifier)
 ![Static Badge](https://img.shields.io/badge/PHP-%3E%3D%208.1-blue)
-![Laravel Compatibility](https://img.shields.io/badge/Laravel-8.x%20|%209.x%20|%2010.x%20|%2011.x%20|%2012.x-blueviolet?logo=laravel&logoColor=white)
+![Laravel Compatibility](https://img.shields.io/badge/Laravel-8.x%20|%209.x%20|%2010.x%20|%2011.x%20|%2012.x%20|%2013.x-blueviolet?logo=laravel&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 
@@ -94,8 +94,22 @@ class ProcessUserJob implements ShouldQueue
 ```
 
 #### Catch all unhandled exceptions in the global Exception Handler
-Edit your `app/Exceptions/Handler.php` file:
+
+**Laravel 11+ / 13.x** — edit `bootstrap/app.php`:
+
+```php
+use TelegramNotifier\TelegramNotifier;
+
+->withExceptions(function (Illuminate\Foundation\Configuration\Exceptions $exceptions) {
+    $exceptions->report(function (Throwable $e) {
+        app(TelegramNotifier::class)->send($e->getMessage());
+    });
+})
 ```
+
+**Laravel 8–10** — edit `app/Exceptions/Handler.php`:
+
+```php
 use TelegramNotifier\TelegramNotifier;
 
 public function report(Throwable $exception)
@@ -151,8 +165,11 @@ This package has been tested and works with the following Laravel versions:
 - Laravel 10.x (LTS)
 - Laravel 11.x
 - Laravel 12.x
+- Laravel 13.x
 
 Laravel 5.5+ may also work, as this package uses automatic service provider registration via Composer.
+
+> **Note**: Laravel 13 requires PHP 8.3 or higher.
 
 ### Acknowledgments
 - [GuzzleHTTP](https://github.com/guzzle/guzzle) for client connection
